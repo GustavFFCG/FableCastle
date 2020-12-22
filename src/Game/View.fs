@@ -80,6 +80,7 @@ let root (model: Model) dispatch =
         let cardImg (c:Card) =
             match c.Type with
                 | Item ``Kungens kalsonger`` -> Some "/img/Kalsong.png"
+                | Monster (``Mördarsnigel``, _) -> Some "/img/Mordarsnigel.png"
                 | _ -> None
         maybeCard
         |> Option.map (fun c ->
@@ -89,7 +90,7 @@ let root (model: Model) dispatch =
                 ] 
                 [
                     div [ClassName "tile has-text-centered"] [
-                        h2 [ClassName "subtitle"] [str (if c.FaceUp then Card.title c else "???")]
+                        h2 [ClassName "subtitle"] [str (if c.DisplayMode = Unknown then "???" else Card.title c)]
                         (match c.Type with
                             | Monster (_, Some _d) -> p [] [str "(skadad)"] |> Some
                             | _ -> None
@@ -100,17 +101,19 @@ let root (model: Model) dispatch =
                         |> ofOption
                     ]
                     div [ClassName "tile"] [
-                        (match c.Type with
-                            | Item _ ->
+                        (match c.Type, c.DisplayMode with
+                            | Item _, Available ->
                                 [
                                     button [Class "button"; OnClick (fun _e -> (PickUp c |> dispatch))] [str "Plocka upp"]
                                     button [Class "button"] [str "Lämna"]
                                 ]
-                            | Monster _ ->
+                            | Monster _, Available ->
                                 [
                                     button [Class "button"; OnClick (fun _e -> (AttackMonster c |> dispatch))] [str "Kämpa"]
                                     button [Class "button"; OnClick (fun _e -> (dispatch Flee))] [str "Fly"]
-                                ]) |> ofList
+                                ]
+                            | _ -> []
+                                ) |> ofList
                     ]
                 ]
             )

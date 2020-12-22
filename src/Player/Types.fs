@@ -16,9 +16,13 @@ type PlayerBuilder = {
     UnusedPoints: int
 }
 
-type Model = PlayerBuilder
+type Model = {
+    Builder:PlayerBuilder
+    ShowStats: bool
+}
 
 type Msg =
     | ChangeName of string
     | ChangeStat of Stat*Change
+    | ShowStats
     | StartGame of PlayerBuilder

@@ -3,11 +3,14 @@ open Elmish
 open Types
 
 let newPlayer = {
-    Name = ""
-    STR = 1
-    DEX = 1
-    CON = 1
-    UnusedPoints = 6
+    Builder = {
+        Name = ""
+        STR = 1
+        DEX = 1
+        CON = 1
+        UnusedPoints = 6
+    }
+    ShowStats = false
 }
 
 let init () : Model * Cmd<Msg> =
@@ -25,7 +28,8 @@ let update msg (model:Model) : Model * Cmd<Msg> =
             | CON, Increase, _  -> {m with CON = m.CON + 1; UnusedPoints = (m.UnusedPoints-1)}
             | _ -> m
     match msg with
-    | ChangeName s -> {model with Name = s.Replace(" ", "") }, []
-    | ChangeStat (s,c) -> model |> updateStat s c, []
+    | ChangeName s -> {model with Builder = {model.Builder with Name = s.Replace(" ", "") }}, []
+    | ShowStats -> {model with ShowStats= true}, []
+    | ChangeStat (s,c) -> {model with Builder = updateStat s c model.Builder }, []
     | StartGame p -> model, []
 

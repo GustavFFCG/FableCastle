@@ -180,7 +180,7 @@ let update msg (model:Model) : Model * Cmd<Msg> =
         |> Map.tryFind key
         |> function
             | Some card ->
-                let revealedCard = {card with FaceUp=true}
+                let revealedCard = {card with DisplayMode=Available}
                 ({model with ActiveCard = Some revealedCard; Cards=model.Cards |> Map.add key revealedCard }, [])
             | None -> ({model with ActiveCard = None}, [])
     | ShowCard c -> ({model with ActiveCard = Some c}, [])

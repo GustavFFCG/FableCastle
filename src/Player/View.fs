@@ -6,36 +6,37 @@ open Types
 open Global.Colors
 
 let root (model: Model) dispatch =
+    let builder = model.Builder
     let statTile =
-         (match model.Name with
-            | "" -> None
-            | _ ->
+         (match model.ShowStats with
+            | false -> None
+            | true ->
                 (div [Class "tile"; Style[BackgroundColor tileBackground]] [
                     p [] [
-                        model.Name |> sprintf "%s mötte en god fe som sa \"Här är sex magiska kristaller. Var och en kan ge dig styrka, hälsa eller skicklighet. Använd dem klokt.\"" |> str
+                        model.Builder.Name |> sprintf "%s mötte en god fe som sa \"Här är sex magiska kristaller. Var och en kan ge dig styrka, hälsa eller skicklighet. Använd dem klokt.\"" |> str
                     ]
                     table [] [
                         tr [] [
                             td [][str "Kristaller kvar"]
-                            td [][str (model.UnusedPoints.ToString())]
+                            td [][str (builder.UnusedPoints.ToString())]
                             td [][]
                             td [][]
                         ]
                         tr [] [
                             td [][str "Din styrka"]
-                            td [][str (model.STR.ToString())]
+                            td [][str (builder.STR.ToString())]
                             td [][a [OnClick (fun _e -> ChangeStat (STR,Increase) |> dispatch) ] [str "+"]]
                             td [][a [OnClick (fun _e -> ChangeStat (STR,Decrease) |> dispatch) ] [str "-"]]
                         ]
                         tr [] [
                             td [][str "Din skicklighet"]
-                            td [][str (model.DEX.ToString())]
+                            td [][str (builder.DEX.ToString())]
                             td [][a [OnClick (fun _e -> ChangeStat (DEX,Increase) |> dispatch) ] [str "+"]]
                             td [][a [OnClick (fun _e -> ChangeStat (DEX,Decrease) |> dispatch) ] [str "-"]]
                         ]
                         tr [] [
                             td [][str "Din hälsa"]
-                            td [][str (model.CON.ToString())]
+                            td [][str (builder.CON.ToString())]
                             td [][a [OnClick (fun _e -> ChangeStat (CON,Increase) |> dispatch) ] [str "+"]]
                             td [][a [OnClick (fun _e -> ChangeStat (CON,Decrease) |> dispatch) ] [str "-"]]
                         ]
@@ -46,13 +47,14 @@ let root (model: Model) dispatch =
         div [Class "tile"; Style[BackgroundColor tileBackground]] [
             p [] [
                 str "I sagornas tid, i ett land långt borta fanns en tapper äventyrare vid namn "
-                input [Value model.Name;OnChange (fun e -> (ChangeName e.Value |> dispatch ))]
+                input [Value builder.Name;OnChange (fun e -> (ChangeName e.Value |> dispatch ))]
+                button [Disabled (builder.Name = ""); OnClick (fun _e -> ShowStats |> dispatch )] [str "Vidare..."]
             ]
         ]
         (statTile)
-        (if model.UnusedPoints = 0 then
+        (if builder.UnusedPoints = 0 then
             (div [Class "tile"; Style[BackgroundColor tileBackground]] [
-                button [OnClick (fun _e -> StartGame model |> dispatch )] [str "Starta äventyret"]]) |> Some
+                button [OnClick (fun _e -> StartGame builder |> dispatch )] [str "Starta äventyret"]]) |> Some
         else
             None
         ) |> ofOption

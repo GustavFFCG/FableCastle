@@ -19,6 +19,7 @@ let init result =
     PlayerBuilderModel model, Cmd.map PlayerMsg playerCmd
 
 let update (msg:Msg) (model:Model) =
+    console.log (message = "ölkölklö")
     match msg, model with
     | PlayerMsg msg, PlayerBuilderModel model ->
         match msg with

@@ -37,18 +37,23 @@ type Stats = {
     AC: int
 }
 
+type CardDisplayMode =
+    | Unknown
+    | Known
+    | Available
+
 type Card = {
     Type: CardType
-    FaceUp: bool
+    DisplayMode: CardDisplayMode
 }
 module Card =
     let newItem itemType = {
         Type = Item itemType
-        FaceUp = false
+        DisplayMode = Unknown
     }
     let newMonster monsterType = {
         Type = Monster (monsterType, None)
-        FaceUp = false
+        DisplayMode = Unknown
     }
         
     let title (c: Card) =
