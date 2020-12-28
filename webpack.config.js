@@ -11,6 +11,7 @@
     var oldSpawn = childProcess.spawn;
     function mySpawn() {
         console.log('spawn called');
+        console.log( 'Path:' + process.env.PATH );
         console.log(arguments);
         var result = oldSpawn.apply(this, arguments);
         return result;
