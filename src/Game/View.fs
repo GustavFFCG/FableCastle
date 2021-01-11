@@ -81,6 +81,7 @@ let root (model: Model) dispatch =
             match c.Type with
                 | Item ``Kungens kalsonger`` -> Some "/img/Kalsong.png"
                 | Monster (``Mördarsnigel``, _) -> Some "/img/Mordarsnigel.png"
+                | Monster (``Marodörmaskros``, _) -> Some "/img/Marodormaskros.jpg"
                 | _ -> None
         maybeCard
         |> Option.map (fun c ->
@@ -97,7 +98,7 @@ let root (model: Model) dispatch =
                         ) |> ofOption
                     ]
                     div [ClassName "tile"] [
-                        (cardImg c |> Option.map (fun url -> img [Src url]))
+                        (cardImg c |> Option.map (fun url -> img [Src url; Style [Height 300; Width 300]]))
                         |> ofOption
                     ]
                     div [ClassName "tile"] [
@@ -146,7 +147,7 @@ let root (model: Model) dispatch =
     let drawMessages =
         List.truncate 6
         >> List.map (fun message ->
-            p [Class "block"][str message]
+            p [][str message]
         )
     div [ClassName "tile is-ancestor"] [
         div [ClassName "tile is-8"] [
@@ -166,12 +167,12 @@ let root (model: Model) dispatch =
             ]
         ]
         div [ClassName "tile is-vertical"] [
-            div [ClassName "tile"] 
+            div [ClassName "tile is-block"] 
                 (drawActivePlayer dispatch model.Player)
-            div [ClassName "tile"] [
+            div [ClassName "tile is-block"] [
                 drawActiveCard model.ActiveCard
             ]
-            div [ClassName "tile content"; Style[BackgroundColor tileBackground]] 
+            div [ClassName "tile is-block"; Style[BackgroundColor tileBackground]] 
                 (drawMessages model.Messages)
             div [ClassName "tile"] [
                 button [OnClick (fun _e -> (Restart |> dispatch))] [str "Börja om"]

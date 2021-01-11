@@ -11,7 +11,7 @@ let root (model: Model) dispatch =
          (match model.ShowStats with
             | false -> None
             | true ->
-                (div [Class "tile"; Style[BackgroundColor tileBackground]] [
+                (div [Class "tile is-block"; Style[BackgroundColor tileBackground]] [
                     p [] [
                         model.Builder.Name |> sprintf "%s mötte en god fe som sa \"Här är sex magiska kristaller. Var och en kan ge dig styrka, hälsa eller skicklighet. Använd dem klokt.\"" |> str
                     ]

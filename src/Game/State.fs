@@ -41,8 +41,8 @@ let squares =
         "D11", {LegalMoves = ["PARKCENTER";"D12"]   ; X=330 ; Y=330; Type = Normal}
         "D20", {LegalMoves = ["BCORNER";"D92"]      ; X=510 ; Y=510; Type = Normal}
         "PARKCENTER", {LegalMoves = ["C10";"C11";"D10";"D11"]; X=300; Y=300; Type = Special}
-        "ACORNER", {LegalMoves = ["A11";"A12"]; X=70; Y=70; Type = Special}
-        "BCORNER", {LegalMoves = ["B11";"B12"]; X=530; Y=530; Type = Special}
+        "ACORNER", {LegalMoves = ["A11";"A12";"D1"]; X=70; Y=70; Type = Special}
+        "BCORNER", {LegalMoves = ["B11";"B12";"D20"]; X=530; Y=530; Type = Special}
         "ENTRANCE", {LegalMoves = ["A22";"B22";"C20"]; X=530; Y=70; Type = Special}
     ] @ squaresOnPath|> Map.ofList
 
@@ -72,7 +72,7 @@ let freshGame player = {
         "C3", Card.newItem ``Brev från Kungen``
         "A7", Card.newMonster ``Zombiepudel``
         "A15", Card.newMonster ``Knivbladsträd``
-        "PARKCENTER", Card.newMonster ``Jättemaskros``
+        "PARKCENTER", Card.newMonster ``Marodörmaskros``
         "B6", Card.newMonster ``Mördarsnigel``
         "ENTRANCE", Card.newMonster ``Vaktzombie``
         ] |> Map.ofList

@@ -16,7 +16,7 @@ type Square = {
 type MonsterType =
     | ``Zombiepudel``
     | ``Mördarsnigel``
-    | ``Jättemaskros``
+    | ``Marodörmaskros``
     | ``Knivbladsträd``
     | ``Vaktzombie``
 
@@ -60,7 +60,7 @@ module Card =
         c.Type |> function
             | Monster (``Zombiepudel``, _) -> "Zombiepudel"
             | Monster (``Mördarsnigel``, _) -> "Mördarsnigel"
-            | Monster (``Jättemaskros``, _) -> "Jättemaskros"
+            | Monster (``Marodörmaskros``, _) -> "Marodörmaskros"
             | Monster (``Knivbladsträd``, _) -> "Knivbladsträd"
             | Monster (``Vaktzombie``, _) -> "Vaktzombie"
             | Item ``Brev från Kungen`` -> "Brev från kungen"
@@ -72,14 +72,14 @@ module MonsterType =
     let xpAward  =  function
         | ``Zombiepudel``   -> 2
         | ``Mördarsnigel``  -> 1
-        | ``Jättemaskros``  -> 2
+        | ``Marodörmaskros``  -> 2
         | ``Knivbladsträd`` -> 2
         | ``Vaktzombie``    -> 3
 
     let stats = function
         | ``Zombiepudel``   -> {STR = 2; DEX = 3; CON = 3; AC = 2}
         | ``Mördarsnigel``  -> {STR = 1; DEX = 3; CON = 3; AC = 1}
-        | ``Jättemaskros``  -> {STR = 1; DEX = 3; CON = 8; AC = 1}
+        | ``Marodörmaskros``  -> {STR = 2; DEX = 2; CON = 8; AC = 1}
         | ``Knivbladsträd`` -> {STR = 3; DEX = 3; CON = 3; AC = 2}
         | ``Vaktzombie``    -> {STR = 3; DEX = 3; CON = 6; AC = 3}
 
