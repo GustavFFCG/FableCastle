@@ -61,6 +61,17 @@ module Player =
         LastSquare ="START"
         Cards = []
     }
+    let recoverHealth (player:Player) =
+        if player.Health < player.Stats.CON
+        then player.Health + 1
+        else player.Health
+        
+    let movePlayer (newSquare : SquareKey) (player: Player) =
+        {player with
+             AtSquare = newSquare
+             LastSquare=player.AtSquare
+             Health = recoverHealth player
+        }
 
 
 let freshGame player = {
@@ -173,7 +184,7 @@ let update msg (model:Model) : Model * Cmd<Msg> =
             model.Squares
             |> Map.find model.Player.AtSquare
         if List.exists (fun k -> k = key) currentSquare.LegalMoves
-        then ({model with Player= {model.Player with AtSquare = key; LastSquare=model.Player.AtSquare}}, Cmd.ofMsg (RevealCard key))
+        then ({model with Player = Player.movePlayer key model.Player}, Cmd.ofMsg (RevealCard key))
         else (model, [])
     | RevealCard key ->
         model.Cards
