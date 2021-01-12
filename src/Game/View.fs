@@ -85,39 +85,43 @@ let root (model: Model) dispatch =
                 | _ -> None
         maybeCard
         |> Option.map (fun c ->
-            div [   ClassName "tile is-vertical has-text-centered"
-                    Style [Width "70"; Height "200"; Border "1px solid black"; BackgroundColor tileBackground]
-                    OnClick (fun _e -> dispatch (HideCard))
-                ] 
-                [
-                    div [ClassName "tile has-text-centered"] [
-                        h2 [ClassName "subtitle"] [str (if c.DisplayMode = Unknown then "???" else Card.title c)]
-                        (match c.Type with
-                            | Monster (_, Some _d) -> p [] [str "(skadad)"] |> Some
-                            | _ -> None
-                        ) |> ofOption
-                    ]
-                    div [ClassName "tile"] [
-                        (cardImg c |> Option.map (fun url -> img [Src url; Style [Height 300; Width 300]]))
-                        |> ofOption
-                    ]
-                    div [ClassName "tile"] [
-                        (match c.Type, c.DisplayMode with
-                            | Item _, Available ->
-                                [
-                                    button [Class "button"; OnClick (fun _e -> (PickUp c |> dispatch))] [str "Plocka upp"]
-                                    button [Class "button"] [str "Lämna"]
-                                ]
-                            | Monster _, Available ->
-                                [
-                                    button [Class "button"; OnClick (fun _e -> (AttackMonster c |> dispatch))] [str "Kämpa"]
-                                    button [Class "button"; OnClick (fun _e -> (dispatch Flee))] [str "Fly"]
-                                ]
-                            | _ -> []
-                                ) |> ofList
-                    ]
+            div [ClassName "modal is-active"] [
+                div [ClassName "modal-background"] []
+                div [ClassName "modal-content is-block"] [
+                    div [   ClassName "tile is-vertical has-text-centered"
+                            Style [Width "70"; Height "200"; Border "1px solid black"; BackgroundColor tileBackground]
+                            OnClick (fun _e -> dispatch (HideCard))
+                        ] 
+                        [
+                            div [ClassName "tile has-text-centered"] [
+                                h2 [ClassName "subtitle"] [str (if c.DisplayMode = Unknown then "???" else Card.title c)]
+                                (match c.Type with
+                                    | Monster (_, Some _d) -> p [] [str "(skadad)"] |> Some
+                                    | _ -> None
+                                ) |> ofOption
+                            ]
+                            div [ClassName "tile"] [
+                                (cardImg c |> Option.map (fun url -> img [Src url; Style [Height 300; Width 300]]))
+                                |> ofOption
+                            ]
+                            div [ClassName "tile"] [
+                                (match c.Type, c.DisplayMode with
+                                    | Item _, Available ->
+                                        [
+                                            button [Class "button"; OnClick (fun _e -> (PickUp c |> dispatch))] [str "Plocka upp"]
+                                            button [Class "button"] [str "Lämna"]
+                                        ]
+                                    | Monster _, Available ->
+                                        [
+                                            button [Class "button"; OnClick (fun _e -> (AttackMonster c |> dispatch))] [str "Kämpa"]
+                                            button [Class "button"; OnClick (fun _e -> (dispatch Flee))] [str "Fly"]
+                                        ]
+                                    | _ -> []
+                                        ) |> ofList
+                            ]
+                        ]
                 ]
-            )
+            ])
         |> ofOption
     let drawActivePlayer dispatch (player: Player) =
         [
@@ -169,11 +173,9 @@ let root (model: Model) dispatch =
         div [ClassName "tile is-vertical"] [
             div [ClassName "tile is-block"] 
                 (drawActivePlayer dispatch model.Player)
-            div [ClassName "tile is-block"] [
-                drawActiveCard model.ActiveCard
-            ]
             div [ClassName "tile is-block"; Style[BackgroundColor tileBackground]] 
                 (drawMessages model.Messages)
+            drawActiveCard model.ActiveCard
             div [ClassName "tile"] [
                 button [OnClick (fun _e -> (Restart |> dispatch))] [str "Börja om"]
             ]
