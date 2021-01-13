@@ -72,6 +72,8 @@ module Player =
              LastSquare=player.AtSquare
              Health = recoverHealth player
         }
+    let skill (player:Player) =
+        player.Stats.DEX
 
 
 let freshGame player = {
@@ -108,28 +110,41 @@ let fightMonster (card: Card) (model: Model) =
     match card.Type with
         | Item _ -> model, []
         | Monster (m, d) ->
-            let damageDone = model.Player.Stats.STR + (Option.defaultValue 0 d)
-            let monsterStats = MonsterType.stats m
-            if damageDone >= monsterStats.CON
+            let successfullAttack =
+                let rand = new System.Random()
+                let attackScore = rand.Next(0, Player.skill model.Player)
+                let monsterAC = MonsterType.stats m |> fun s -> s.AC
+                attackScore >= monsterAC
+            if successfullAttack
             then
-                let messages = (Card.title card |> sprintf "Du har besegrat %s!") :: model.Messages
-                let player = {model.Player with XP = model.Player.XP + (MonsterType.xpAward m)}
-                let cards = model.Cards |> Map.remove model.Player.AtSquare
-                {model with
-                    Player = player
-                    Cards=cards
-                    ActiveCard= None
-                    Messages = messages
-                    }, []
+                let damageDone = model.Player.Stats.STR + (Option.defaultValue 0 d)
+                let monsterStats = MonsterType.stats m
+                if damageDone >= monsterStats.CON
+                then
+                    let messages = (Card.title card |> sprintf "Du har besegrat %s!") :: model.Messages
+                    let player = {model.Player with XP = model.Player.XP + (MonsterType.xpAward m)}
+                    let cards = model.Cards |> Map.remove model.Player.AtSquare
+                    {model with
+                        Player = player
+                        Cards=cards
+                        ActiveCard= None
+                        Messages = messages
+                        }, []
+                else
+                    let messages = (Card.title card |> sprintf "Du har skadat %s!") :: model.Messages
+                    let card = {card with Type = Monster (m, Some damageDone)}
+                    let cards = model.Cards |> Map.add model.Player.AtSquare card
+                    {model with
+                        Cards=cards
+                        ActiveCard= Some card
+                        Messages = messages
+                        }, Cmd.ofMsg (MonsterAttacks card)
             else
-                let messages = (Card.title card |> sprintf "Du har skadat %s!") :: model.Messages
-                let card = {card with Type = Monster (m, Some damageDone)}
-                let cards = model.Cards |> Map.add model.Player.AtSquare card
+                let messages = (Card.title card |> sprintf "Du missade %s") :: model.Messages
                 {model with
-                    Cards=cards
-                    ActiveCard= Some card
                     Messages = messages
                     }, Cmd.ofMsg (MonsterAttacks card)
+
 
 let monsterFightsYou (card: Card) (model: Model) = 
     match card.Type with
