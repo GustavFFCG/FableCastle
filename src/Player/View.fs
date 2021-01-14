@@ -32,8 +32,8 @@ let root (model: Model) dispatch =
                                 [
                                     a [OnClick (fun _e -> ChangeStat (STR,Increase) |> dispatch) ] [str "+"]
                                     a [OnClick (fun _e -> ChangeStat (STR,Decrease) |> dispatch) ] [str "-"]
-                                ] :: (crystalRow builder.STR)
-                                |> ofList
+                                    span [] (crystalRow builder.STR)
+                                ]
                         ]
                         tr [] [
                             td [][str "Din skicklighet"]
@@ -41,8 +41,8 @@ let root (model: Model) dispatch =
                                 [
                                     a [OnClick (fun _e -> ChangeStat (DEX,Increase) |> dispatch) ] [str "+"]
                                     a [OnClick (fun _e -> ChangeStat (DEX,Decrease) |> dispatch) ] [str "-"]
-                                ] :: (crystalRow builder.DEX)
-                                |> ofList
+                                    span [] (crystalRow builder.DEX)
+                                ]
                         ]
                         tr [] [
                             td [][str "Din hälsa"]
@@ -50,8 +50,8 @@ let root (model: Model) dispatch =
                                 [
                                     a [OnClick (fun _e -> ChangeStat (CON,Increase) |> dispatch) ] [str "+"]
                                     a [OnClick (fun _e -> ChangeStat (CON,Decrease) |> dispatch) ] [str "-"]
-                                ] :: (crystalRow builder.CON)
-                                |> ofList
+                                    span [] (crystalRow builder.CON)
+                                ]
                         ]
                     ]
                 ]) |> Some
