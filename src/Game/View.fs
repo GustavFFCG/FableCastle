@@ -82,6 +82,7 @@ let root (model: Model) dispatch =
                 | Item ``Kungens kalsonger`` -> Some "/img/Kalsong.png"
                 | Monster (``Mördarsnigel``, _) -> Some "/img/Mordarsnigel.png"
                 | Monster (``Marodörmaskros``, _) -> Some "/img/Marodormaskros.jpg"
+                | Monster (``Zombiepudel``, _) -> Some "/img/Zombiepudel.png"
                 | _ -> None
         maybeCard
         |> Option.map (fun c ->
@@ -89,7 +90,7 @@ let root (model: Model) dispatch =
                 div [ClassName "modal-background"] []
                 div [ClassName "modal-content is-block"] [
                     div [   ClassName "tile is-vertical has-text-centered"
-                            Style [Width "70"; Height "200"; Border "1px solid black"; BackgroundColor tileBackground]
+                            //Style [Width "70"; Height "200"; Border "1px solid black"; BackgroundColor tileBackground]
                             OnClick (fun _e -> dispatch (HideCard))
                         ] 
                         [

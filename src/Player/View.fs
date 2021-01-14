@@ -11,34 +11,47 @@ let root (model: Model) dispatch =
          (match model.ShowStats with
             | false -> None
             | true ->
+                let crystalRow = function
+                    | n when n < 1 -> []
+                    | n ->
+                        {1..n}
+                        |> Seq.map (fun _ -> img [Src "/img/Crystal.png"])
+                        |> List.ofSeq
                 (div [Class "tile is-block"; Style[BackgroundColor tileBackground]] [
                     p [] [
-                        model.Builder.Name |> sprintf "%s mötte en god fe som sa \"Här är sex magiska kristaller. Var och en kan ge dig styrka, hälsa eller skicklighet. Använd dem klokt.\"" |> str
+                        model.Builder.Name |> sprintf "%s mötte en god fe som sa \"Här är sex magiska kristaller. Var och en kan förbättra din styrka, hälsa eller skicklighet. Använd dem klokt.\"" |> str
                     ]
                     table [] [
                         tr [] [
                             td [][str "Kristaller kvar"]
-                            td [][str (builder.UnusedPoints.ToString())]
-                            td [][]
-                            td [][]
+                            td [] (crystalRow builder.UnusedPoints)
                         ]
                         tr [] [
                             td [][str "Din styrka"]
-                            td [][str (builder.STR.ToString())]
-                            td [][a [OnClick (fun _e -> ChangeStat (STR,Increase) |> dispatch) ] [str "+"]]
-                            td [][a [OnClick (fun _e -> ChangeStat (STR,Decrease) |> dispatch) ] [str "-"]]
+                            td []
+                                [
+                                    a [OnClick (fun _e -> ChangeStat (STR,Increase) |> dispatch) ] [str "+"]
+                                    a [OnClick (fun _e -> ChangeStat (STR,Decrease) |> dispatch) ] [str "-"]
+                                ] :: (crystalRow builder.STR)
+                                |> ofList
                         ]
                         tr [] [
                             td [][str "Din skicklighet"]
-                            td [][str (builder.DEX.ToString())]
-                            td [][a [OnClick (fun _e -> ChangeStat (DEX,Increase) |> dispatch) ] [str "+"]]
-                            td [][a [OnClick (fun _e -> ChangeStat (DEX,Decrease) |> dispatch) ] [str "-"]]
+                            td []
+                                [
+                                    a [OnClick (fun _e -> ChangeStat (DEX,Increase) |> dispatch) ] [str "+"]
+                                    a [OnClick (fun _e -> ChangeStat (DEX,Decrease) |> dispatch) ] [str "-"]
+                                ] :: (crystalRow builder.DEX)
+                                |> ofList
                         ]
                         tr [] [
                             td [][str "Din hälsa"]
-                            td [][str (builder.CON.ToString())]
-                            td [][a [OnClick (fun _e -> ChangeStat (CON,Increase) |> dispatch) ] [str "+"]]
-                            td [][a [OnClick (fun _e -> ChangeStat (CON,Decrease) |> dispatch) ] [str "-"]]
+                            td []
+                                [
+                                    a [OnClick (fun _e -> ChangeStat (CON,Increase) |> dispatch) ] [str "+"]
+                                    a [OnClick (fun _e -> ChangeStat (CON,Decrease) |> dispatch) ] [str "-"]
+                                ] :: (crystalRow builder.CON)
+                                |> ofList
                         ]
                     ]
                 ]) |> Some
